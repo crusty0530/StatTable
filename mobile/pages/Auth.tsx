@@ -11,9 +11,11 @@ export default function Auth(){
 
     const handleSubmit = async () => {
         if (isLogin) {
-            supabase.auth.signInWithPassword({ email, password })
+            const { error } = await supabase.auth.signInWithPassword({ email, password })
+            if (error) console.log(error.message)
         } else {
-            supabase.auth.signUp({ email, password, options: { data: { username } } })
+            const { error } = await supabase.auth.signUp({ email, password, options: { data: { username } } })
+            if (error) console.log(error.message)
         }
     }
     
@@ -40,7 +42,7 @@ export default function Auth(){
             <TextInput value={email} onChangeText={setEmail} style={styles.textBox}/>
 
             <Text>Password:</Text>
-            <TextInput value={password} onChangeText={setPassword} style={styles.textBox}/>
+            <TextInput value={password} onChangeText={setPassword} style={styles.textBox} secureTextEntry={true}/>
 
             <TouchableOpacity onPress={handleSubmit}>
                 <Text>{isLogin ? "Login" : "Register"}</Text>
@@ -54,7 +56,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 16
+        padding: 16,
+        backgroundColor: '#ffffff'
     },
 
     textBox: {
