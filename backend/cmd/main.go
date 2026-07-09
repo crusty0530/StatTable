@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/crusty0530/stattable/internal/db"
+	"github.com/crusty0530/stattable/internal/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 )
@@ -22,6 +23,7 @@ func main() {
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("ok"))
 	})
+	r.Get("/profile/{id}", handlers.Profile)
 
 	http.ListenAndServe(":8080", r)
 }
