@@ -1,13 +1,9 @@
 import { View, Text } from "react-native";
-import { useContext } from "react";
-import { AuthContext, Profile as UserProfile } from "../context/AuthContext";
+import { useAuth, Profile as UserProfile } from "../context/AuthContext";
 
 export default function Profile(){
 
-    const context = useContext(AuthContext)
-    if (!context) return null
-
-    const { session, profile } = context
+    const { session, profile } = useAuth()
 
     if (!profile) return <Text>Loading...</Text>
 

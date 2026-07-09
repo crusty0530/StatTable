@@ -9,7 +9,7 @@ import Decks from './pages/Decks';
 import Pod from './pages/Pod';
 import Profile from './pages/Profile';
 import Auth from './pages/Auth';
-import AuthProvider, { AuthContext } from './context/AuthContext';
+import AuthProvider, { useAuth } from './context/AuthContext';
 
 
 
@@ -17,10 +17,7 @@ const Tab = createBottomTabNavigator();
 
 export function AppNavigator(){
 
-  const context = useContext(AuthContext)
-  if (!context) return null
-
-  const { session } = context
+  const { session } = useAuth()
 
   return(
     <NavigationContainer>
