@@ -6,6 +6,7 @@ import (
 
 	"github.com/crusty0530/stattable/internal/db"
 	"github.com/crusty0530/stattable/internal/handlers"
+	appMiddleware "github.com/crusty0530/stattable/internal/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 )
@@ -23,7 +24,11 @@ func main() {
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("ok"))
 	})
-	r.Get("/profile/{id}", handlers.Profile)
+
+	r.Group(func(r chi.Router) {
+		r.Use(appMiddleware.AuthMiddleware)
+		r.Get("/profile/{id}", handlers.Profile)
+	})
 
 	http.ListenAndServe(":8080", r)
 }
