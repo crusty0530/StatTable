@@ -10,9 +10,18 @@ export interface Profile {
     favorite_deck_id: string | null
 }
 
+export interface PlayerStats {
+    total_games_played: number
+    total_wins: number
+    win_rate: number
+    average_placement: number
+    most_played_deck: string
+}
+
 interface AuthContextType {
     session: Session | null
     profile: Profile | null
+    stats: PlayerStats | null
 }
 
 interface AuthProviderProps {
@@ -25,7 +34,8 @@ export default function AuthProvider({ children }: AuthProviderProps){
 
     const [ session, setSession ] = useState<Session | null>(null)
     const [ profile, setProfile ] = useState<Profile | null>(null)
-    
+    const [ stats, setStats ] = useState<PlayerStats | null>(null)
+        
     useEffect(() => {
         const getSession = async () => {
         const { data } = await supabase.auth.getSession()
@@ -42,20 +52,24 @@ export default function AuthProvider({ children }: AuthProviderProps){
     useEffect(() => {
             if(!session) return
     
-            const fetchProfile = async () => {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('id', session.user.id)
-                    .single()
-    
-                if (data) setProfile(data)
+            const fetchData = async () => {
+                const profileResponse = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/profile/${session.user.id}`, {
+                    headers: { Authorization: `Bearer ${session.access_token}` }
+                })
+                const profileData = await profileResponse.json()
+                setProfile(profileData)
+
+                const statsResponse = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/stats/${session.user.id}`, {
+                    headers: { Authorization: `Bearer ${session.access_token}` }
+                })
+                const statsData = await statsResponse.json()
+                setStats(statsData)
             }
-            fetchProfile()
+            fetchData()
         }, [session])
 
     return(
-        <AuthContext.Provider value={{ session, profile }}>
+        <AuthContext.Provider value={{ session, profile, stats }}>
             {children}
         </AuthContext.Provider>
     )

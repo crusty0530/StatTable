@@ -28,6 +28,7 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(appMiddleware.AuthMiddleware)
 		r.Get("/profile/{id}", handlers.Profile)
+		r.Get("/stats/{id}", handlers.Stats)
 	})
 
 	http.ListenAndServe(":8080", r)
