@@ -1,12 +1,21 @@
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { DeckResponse } from "../types";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import AddDeck from "./AddDeck";
+
+type DecksStackParamList = {
+    Decklist: undefined
+    AddDeck: undefined
+}
 
 export default function Decks(){
 
     const { session } = useAuth()
     const [ decks, setDecks ] = useState<DeckResponse[]>([])
+    const navigation = useNavigation<NativeStackNavigationProp<DecksStackParamList>>()
 
     useEffect(() => {
         if (!session) return
@@ -36,6 +45,8 @@ export default function Decks(){
             ) : (
                 <Text>No Decks</Text>
             )}
+
+            <Button title="Add Deck" onPress={() => navigation.navigate('AddDeck')}/>
         </View>
     )
 }

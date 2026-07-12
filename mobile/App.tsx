@@ -5,11 +5,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useContext } from 'react';
 
 import Dashboard from './pages/Dashboard';
-import Decks from './pages/Decks';
 import Pod from './pages/Pod';
 import Profile from './pages/Profile';
 import Auth from './pages/Auth';
 import AuthProvider, { useAuth } from './context/AuthContext';
+import DeckStack from './pages/DecksStack';
 
 
 
@@ -24,7 +24,7 @@ export function AppNavigator(){
           {session ? (
               <Tab.Navigator screenOptions={{ headerShown: false }}>
                   <Tab.Screen name='Dashboard' component={Dashboard}/>
-                  <Tab.Screen name='Decks' component={Decks}/>
+                  <Tab.Screen name='Decks' component={DeckStack}/>
                   <Tab.Screen name='Pod' component={Pod}/>
                   <Tab.Screen name='Profile' component={Profile}/>
               </Tab.Navigator>
