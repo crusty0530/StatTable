@@ -1,5 +1,6 @@
 import { View, Text } from "react-native";
-import { useAuth, Profile as UserProfile } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
+import { Profile as UserProfile } from "../types";
 import { StyleSheet } from "react-native";
 import { Image } from "react-native";
 

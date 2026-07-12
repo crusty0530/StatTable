@@ -29,6 +29,7 @@ func main() {
 		r.Use(appMiddleware.AuthMiddleware)
 		r.Get("/profile/{id}", handlers.Profile)
 		r.Get("/stats/{id}", handlers.Stats)
+		r.Get("/decks/{id}", handlers.GetDecks)
 	})
 
 	http.ListenAndServe(":8080", r)

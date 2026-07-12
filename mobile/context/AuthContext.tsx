@@ -1,22 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { Session } from "@supabase/auth-js";
 import { supabase } from "../lib/supabase";
-
-export interface Profile {
-    id: string
-    email: string
-    username: string
-    avatar: string | null
-    favorite_deck_id: string | null
-}
-
-export interface PlayerStats {
-    total_games_played: number
-    total_wins: number
-    win_rate: number
-    average_placement: number
-    most_played_deck: string
-}
+import { PlayerStats, Profile } from "../types";
 
 interface AuthContextType {
     session: Session | null
