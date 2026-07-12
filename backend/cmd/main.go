@@ -24,6 +24,7 @@ func main() {
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("ok"))
 	})
+	r.Get("/search/commanders", handlers.SearchCommanders)
 
 	r.Group(func(r chi.Router) {
 		r.Use(appMiddleware.AuthMiddleware)
