@@ -31,6 +31,7 @@ func main() {
 		r.Get("/profile/{id}", handlers.Profile)
 		r.Get("/stats/{id}", handlers.Stats)
 		r.Get("/decks/{id}", handlers.GetDecks)
+		r.Post("/decks", handlers.CreateDeck)
 	})
 
 	http.ListenAndServe(":8080", r)

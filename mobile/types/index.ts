@@ -23,3 +23,10 @@ export interface DeckResponse {
     scryfall_id: string
     playstyle: string
 }
+
+export interface ScryfallCard {
+    id: string
+    name: string
+    image_uris: { [key: string]: string }
+    color_identity: string[]
+}
