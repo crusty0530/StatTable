@@ -32,6 +32,7 @@ func main() {
 		r.Get("/stats/{id}", handlers.Stats)
 		r.Get("/decks/{id}", handlers.GetDecks)
 		r.Post("/decks", handlers.CreateDeck)
+		r.Delete("/decks/{id}", handlers.DeleteDeck)
 	})
 
 	http.ListenAndServe(":8080", r)

@@ -1,4 +1,4 @@
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, TouchableOpacity } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { useCallback, useEffect, useState } from "react";
 import { DeckResponse } from "../types";
@@ -14,6 +14,7 @@ export default function Decks(){
 
     const { session } = useAuth()
     const [ decks, setDecks ] = useState<DeckResponse[]>([])
+    const [ selectedDeck, setSelectedDeck ] = useState<string | null>(null)
     const navigation = useNavigation<NativeStackNavigationProp<DecksStackParamList>>()
 
     const fetchDecks = async () => {
@@ -33,21 +34,39 @@ export default function Decks(){
         }, [session])
     )
 
+    const deleteDeck = async () => {
+
+        const deleteResponse = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/decks/${selectedDeck}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session?.access_token}`
+            }
+        })
+
+        if (deleteResponse.ok) {
+            setSelectedDeck(null)
+            fetchDecks()
+        }
+    }
+
     if (!session) return <Text>Loading...</Text>
 
     return(
         <View>
             {decks.length > 0 ? (
                 decks.map((deck) => (
-                    <View key={deck.id}>
+                    <TouchableOpacity key={deck.id} onPress={() => setSelectedDeck(deck.id)}>
                         <Text>{deck.deck_name}</Text>
                         <Text>{deck.commander_name}</Text>
-                    </View>
+                        <Text>{"\n"}</Text>
+                    </TouchableOpacity>
                 ))
             ) : (
                 <Text>No Decks</Text>
             )}
 
+            <Button title="Delete Deck" onPress={() => {deleteDeck()}} disabled={selectedDeck === null}/>
             <Button title="Add Deck" onPress={() => navigation.navigate('AddDeck')}/>
         </View>
     )

@@ -84,3 +84,18 @@ func CreateDeck(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"id": id})
 }
+
+func DeleteDeck(w http.ResponseWriter, r *http.Request) {
+
+	id := chi.URLParam(r, "id")
+	userID := r.Context().Value("userID").(string)
+
+	_, err := db.DB.Exec("DELETE FROM decks WHERE id = $1 AND user_id = $2", id, userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"id": id})
+}

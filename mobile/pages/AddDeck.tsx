@@ -28,26 +28,33 @@ export default function AddDeck() {
     }
 
     const saveDeck = async () => {
+        console.log('saveDeck called')
+        console.log('commander:', commander)
+        console.log('deckName:', deckName)
         const body = {
             deck_name: deckName,
             playstyle: playstyle,
-            commander_name: commander?.name,
-            commander_image_uri: commander?.image_uris.normal ?? "",
+            commander_name: commander?.card_faces?.[0]?.name ?? commander?.name,
+            commander_image_uri: commander?.image_uris?.normal ?? commander?.card_faces?.[0]?.image_uris?.normal ?? "",
             color_identity: commander?.color_identity,
             scryfall_id: commander?.id
         }
 
-        const saveResponse = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/decks`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session?.access_token}`
-            },
-            body: JSON.stringify(body)
-        })
-
-        if (saveResponse.ok) {
-            navigation.goBack()
+        try {
+            const saveResponse = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/decks`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session?.access_token}`
+                },
+                body: JSON.stringify(body)
+            })
+            console.log('save status:', saveResponse.status)
+            if (saveResponse.ok) {
+                navigation.goBack()
+            }
+        } catch (err) {
+            console.log('save error:', err)
         }
     }
 

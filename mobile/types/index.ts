@@ -27,6 +27,10 @@ export interface DeckResponse {
 export interface ScryfallCard {
     id: string
     name: string
-    image_uris: { [key: string]: string }
+    image_uris: { [key: string]: string } | null
     color_identity: string[]
+    card_faces?: {
+        name: string
+        image_uris: { [ key: string]: string }
+    }[]
 }
