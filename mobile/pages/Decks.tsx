@@ -20,7 +20,6 @@ export default function Decks(){
     const fetchDecks = async () => {
         if (!session) return
 
-        console.log('fetching decks...')
         const decksResponse = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/decks/${session.user.id}`, {
             headers: { Authorization: `Bearer ${session.access_token}` }
         })
