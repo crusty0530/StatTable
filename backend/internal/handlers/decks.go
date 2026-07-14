@@ -33,7 +33,7 @@ func GetDecks(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
 	var decks []DeckResponse
-	rows, err := db.DB.Query("SELECT id, deck_name, commander_name, commander_image_uri, color_identity, scryfall_id, playstyle FROM decks WHERE user_id = $1", id)
+	rows, err := db.DB.Query("SELECT id, deck_name, commander_name, commander_image_uri, color_identity, scryfall_id, playstyle FROM decks WHERE user_id = $1 AND deleted_at IS NULL", id)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -90,7 +90,7 @@ func DeleteDeck(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	userID := r.Context().Value("userID").(string)
 
-	_, err := db.DB.Exec("DELETE FROM decks WHERE id = $1 AND user_id = $2", id, userID)
+	_, err := db.DB.Exec("UPDATE decks SET deleted_at = NOW() WHERE id = $1 AND user_id = $2", id, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
