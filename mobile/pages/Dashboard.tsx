@@ -1,14 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { View, Text, Button, StyleSheet } from "react-native";
+import { RootStackParamList } from "../types";
 
 export default function Dashboard(){
-
-    type RootStackParamList = {
-        Tabs: undefined
-        PlayerSetup: undefined
-        LiveGame: undefined
-    }
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 

@@ -33,6 +33,7 @@ func main() {
 		r.Get("/decks/{id}", handlers.GetDecks)
 		r.Post("/decks", handlers.CreateDeck)
 		r.Delete("/decks/{id}", handlers.DeleteDeck)
+		r.Get("/users/search", handlers.SearchUsers)
 	})
 
 	http.ListenAndServe(":8080", r)

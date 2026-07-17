@@ -24,7 +24,7 @@ export default function Decks(){
             headers: { Authorization: `Bearer ${session.access_token}` }
         })
         const decksData = await decksResponse.json()
-        setDecks(decksData)
+        setDecks(decksData ?? [])
     }
 
     useFocusEffect(

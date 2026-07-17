@@ -34,3 +34,25 @@ export interface ScryfallCard {
         image_uris: { [ key: string]: string }
     }[]
 }
+
+export interface GamePlayer {
+    user_id: string | null
+    username: string 
+    deck_id: | null
+    deck_name: | null
+}
+
+export interface UserSearchResult {
+    id: string
+    username: string
+}
+
+export type RootStackParamList = {
+    Tabs: undefined
+    PlayerSetup: undefined
+    LiveGame: {
+        players: GamePlayer[]
+        timerEnabled: boolean
+        turnLength: number
+    }
+}
