@@ -32,6 +32,17 @@ export default function LiveGame(){
         })
     }
 
+    const nextTurn = () => {
+        const currentIndex = players.findIndex(p => p.username === activePlayer.username)
+        
+        if (currentIndex === players.length - 1){
+            setActivePlayer(players[0])
+            setTurnCount(turnCount + 1)
+        } else {
+            setActivePlayer(players[currentIndex + 1])
+        }
+    }
+
     return(
         <View style={styles.container}>
             {players.map((player, index) => (
@@ -42,6 +53,12 @@ export default function LiveGame(){
                     <Button title="-1" onPress={() => adjustLife(player.username, -1)}/>
                 </View>
             ))}
+
+            <View>
+                <Text>{turnCount}</Text>
+                <Text>{activePlayer.username}'s Turn</Text>
+                <Button title="End Turn" onPress={nextTurn}/>
+            </View>
         </View>
     )
 }
