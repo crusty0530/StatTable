@@ -1,6 +1,6 @@
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import { RootStackParamList } from "../types";
 
 export default function LiveGame(){
@@ -12,7 +12,7 @@ export default function LiveGame(){
     const [ turnCount, setTurnCount ] = useState(0)
     const [ activePlayer, setActivePlayer ] = useState(players[0])
     const [ timerRunning, setTimerRunning ] = useState(false)
-    const [ remainingTime, setRemainingTimer ] = useState(0)
+    const [ remainingTime, setRemainingTime ] = useState(0)
     const [ eliminatedPlayers, setEliminatedPlayers ] = useState<string[]>([])
 
     useEffect(() => {
@@ -23,7 +23,28 @@ export default function LiveGame(){
             return acc
         }, {} as Record<string, number>)
         setLifeTotals(initialTotals)
+
+        if (timerEnabled) {
+            setRemainingTime(turnLength)
+            setTimerRunning(true)
+        }
     }, [])
+
+    useEffect(() => {
+        if (!timerRunning) return
+        
+        const interval = setInterval(() => {
+            setRemainingTime(prev => prev - 1)
+        }, 1000)
+        
+        return () => clearInterval(interval)
+    }, [timerRunning])
+
+    useEffect(() => {
+        if (remainingTime === 0 && timerEnabled && timerRunning) {
+            Alert.alert("Time's Up!", "Your turn is over")
+        }
+    }, [remainingTime])
 
     const adjustLife = (player: string, amount: number) => {
         setLifeTotals({
@@ -34,6 +55,10 @@ export default function LiveGame(){
 
     const nextTurn = () => {
         const currentIndex = players.findIndex(p => p.username === activePlayer.username)
+
+        if (timerEnabled){
+            setTimerRunning(true)
+        }
         
         if (currentIndex === players.length - 1){
             setActivePlayer(players[0])
@@ -41,6 +66,8 @@ export default function LiveGame(){
         } else {
             setActivePlayer(players[currentIndex + 1])
         }
+
+        setRemainingTime(turnLength)
     }
 
     return(
@@ -57,6 +84,11 @@ export default function LiveGame(){
             <View>
                 <Text>{turnCount}</Text>
                 <Text>{activePlayer.username}'s Turn</Text>
+                {timerEnabled ? (
+                    <Text>{remainingTime} seconds left</Text>
+                ) : (
+                    null
+                )}
                 <Button title="End Turn" onPress={nextTurn}/>
             </View>
         </View>
